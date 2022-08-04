@@ -1,10 +1,10 @@
 # csc413-tankgame
 
 
-| Student Information |                |
-|:-------------------:|----------------|
-|  Student Name       |   Name Here    |
-|  Student Email      |   Email Here   |
+| Student Information |                       |
+|:-------------------:|-----------------------|
+|  Student Name       | Ethan Lunderville     |
+|  Student Email      | elunderville@sfsu.edu |
 
 ## src Folder Purpose 
 src folder is to be used to store source code only.
@@ -35,12 +35,12 @@ The jar folder is to be used to store the built jar of your term-project.
 
 ## Controls to play your Game:
 
-|               | Player 1 | Player 2 |
-|---------------|----------|----------|
-|  Forward      |          |          |
-|  Backward     |          |          |
-|  Rotate left  |          |          |
-|  Rotate Right |          |          |
-|  Shoot        |          |          |
+|               | Player 1 | Player 2  |
+|---------------|----------|-----------|
+|  Forward      | W        | Up Key    |
+|  Backward     | S        | Down Key  |
+|  Rotate left  | A        | Left Key  |
+|  Rotate Right | D        | Right Key |
+|  Shoot        | Space    | K         |
 
 <!-- you may add more controls if you need to. -->
