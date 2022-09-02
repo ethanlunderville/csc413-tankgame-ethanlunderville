@@ -1,6 +1,7 @@
 # csc413-tankgame
 
 
+
 | Student Information |                       |
 |:-------------------:|-----------------------|
 |  Student Name       | Ethan Lunderville     |
@@ -25,46 +26,42 @@ The jar folder is to be used to store the built jar of your term-project.
 
 ## Version of Java Used: Java 17
 
-## IDE used: Intellij
+## IDE used: Intellij IDEA
 
 ## Steps to Import project into IDE:
 
-Select File->New->Project From Existing Sources
+1. Select File -> New -> Project From Existing Sources
 
-Select the csc413-tankgame-ethanlunderville folder and press ”ok”
+2. Select the csc413-tankgame-ethanlunderville folder and press ”ok”
 
 ## Steps to Build and run your Project:
 
-Once the project has been imported. Create an application run configuration using the Main.Launcher class as the Main class.
-Ensure that you are using at least java 17 or above.
+1. Create an application run configuration using the Main.Launcher class as the Main class.
+Ensure that you are using at least java 17 or above for your SDK.
 
-After that press apply and ok on the bottom right of the GUI.
-Following this you will need to tell the ide where the resource folder is. To do this you press :
+2. After that press apply and ok on the bottom right of the GUI.
+Following this you will need to tell Intellij where the resource folder is. To do this you press :
 
-File -> Project Settings -> Project Structure -> Modules
-Press the csc413-tankgame-ethanlunderville module and you will see this:
+    File -> Project Settings -> Project Structure -> Modules
 
-On the “mark as” menu click resources and then click resources from the files in the project.
-After this apply the changes and the game should be ready to run.
-Press the green play button.
+3. Click on the resources folder under the project directory and then on the “mark as” menu click resources.
+
+4. Apply the changes and the game should be ready to run. Press the green play button.
 
 Building the Jar
 
-Go to
+1. Go to
 File -> Project Settings -> Artifacts and press the plus sign
 
-Then choose Jar and “From modules with dependencies…”
+2. Choose Jar and “From modules with dependencies…”
 When it asks for the main class type: Main.Launcher.
-After this, to build the jar, go to
+After this, to build the jar, go to:
 
-Build -> Build Artifacts.
+   Build -> Build Artifacts.
 
+3. To run the jar, open a terminal (Command Prompt, Powershell etc.) and navigate into csc413-tankgame-ethanlunderville\out\artifacts\.
 
-Now the jar should be in the csc413-tankgame-ethanlunderville\out\artifacts\csc413_tankgame_ethanlunderville_jar directory.
-To run the jar, open a terminal (Command Prompt, Powershell etc.) and navigate into this directory.
-When you are in the directory type this command to run the game :  
-
-java -jar csc413-tankgame-ethanlunderville.jar
+4. java -jar csc413-tankgame-ethanlunderville.jar
 
 ## Controls to play your Game:
 
