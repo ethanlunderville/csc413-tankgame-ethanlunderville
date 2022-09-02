@@ -2,6 +2,9 @@ package GameObjects.Tanks;
 
 import GameObjects.*;
 import GameObjects.Bullet.Bullet;
+import GameObjects.Bullet.Rocket;
+import GameObjects.PowerUps.Powerup;
+import GameObjects.Walls.Wall;
 import Main.Game;
 import Main.GameConstants;
 import Main.ResourcePool;
@@ -11,6 +14,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.List;
+
 
 
 public class Tank implements Moveable, Collidable {
@@ -25,7 +29,6 @@ public class Tank implements Moveable, Collidable {
 
     private final int startingX;
     private final int startingY;
-
     private float previousX;
     private float previousY;
 
@@ -54,7 +57,7 @@ public class Tank implements Moveable, Collidable {
     private final Rectangle hitbox;
 
     private Bullet b;
-    private String bulletType = "Normal";
+    private boolean bulletPowerUp;
 
     public Tank(float x, float y, float vx, float vy, float angle, BufferedImage img, Game g) {
         this.x = x;
@@ -69,6 +72,7 @@ public class Tank implements Moveable, Collidable {
         this.health = 100;
         this.lives = 3;
         this.Game = g;
+        this.bulletPowerUp = false;
     }
 
     public void setPosition(float x, float y) {
@@ -160,6 +164,7 @@ public class Tank implements Moveable, Collidable {
     }
 
     public void update(Game game) {
+
         if (this.UpPressed) {
             this.moveForwards();
         }
@@ -179,20 +184,19 @@ public class Tank implements Moveable, Collidable {
         if (this.ShootPressed && this.coolDown >= this.fireDelay) {
             this.coolDown = 0;
 
-            (new Sound(ResourcePool.getSounds("shoot"))).playSound();
-
-            if ("Normal".equals(this.bulletType)) {
-                b = new Bullet(game, x, y, angle, ResourcePool.getImages("bullet"), this, 20);
+            if (!bulletPowerUp) {
+                b = new Bullet(game, x, y, angle, this);
                 game.addToMoveables(b);
                 game.addToBullets(b);
-            } else if ("Rocket".equals(this.bulletType)) {
-                b = new Bullet(game, x, y, angle, ResourcePool.getImages("rocket"), this, 35);
+            } else {
+                b = new Rocket(game, x, y, angle, this);
                 game.addToMoveables(b);
                 game.addToBullets(b);
             }
         }
         coolDown += this.rateOfFire;
         this.centerScreen();
+
     }
 
     private void rotateLeft() {
@@ -239,8 +243,8 @@ public class Tank implements Moveable, Collidable {
         if (y < 40) {
             y = 40;
         }
-        if (y >= GameConstants.WORLD_HEIGHT - 120) {
-            y = GameConstants.WORLD_HEIGHT - 120;
+        if (y >= GameConstants.WORLD_HEIGHT - 125) {
+            y = GameConstants.WORLD_HEIGHT - 125;
         }
     }
 
@@ -258,13 +262,17 @@ public class Tank implements Moveable, Collidable {
         g2d.setColor(Color.MAGENTA);
 
         int health1 = (int) (((float) health / 100) * this.img.getWidth());
-        g2d.setColor(Color.green);
 
-        g2d.fillRect((int) x, (int) y + 60, health1, this.img.getHeight() - 43);
-        g2d.drawRect((int) x, (int) y + 60, this.img.getWidth(), this.img.getHeight() - 43);
+        g2d.setColor(Color.black);
+        g2d.drawRect((int) x, (int) y + 65, this.img.getWidth(), this.img.getHeight() - 40);
+        g2d.setColor(Color.green);
+        g2d.fillRect((int) x, (int) y + 65, health1, this.img.getHeight() - 40);
 
         for (int i = 0; i < this.lives; i++) {
-            g2d.drawOval((int) x + (20 * (i)), (int) (y - 40), 15, 15);
+            g2d.setColor(Color.black);
+            g2d.drawOval((int) x + (20 * (i))  , (int) (y - 40), 15, 15);
+            g2d.fillOval((int) x + (20 * (i))  , (int) (y - 40), 17, 17);
+            g2d.setColor(Color.green);
             g2d.fillOval((int) x + (20 * (i)), (int) (y - 40), 15, 15);
         }
 
@@ -296,7 +304,7 @@ public class Tank implements Moveable, Collidable {
 
     public void resetTank() {
         Game.addToAnimations((int) this.getX(), (int) this.getY(), this.explosionAnimation);
-        this.bulletType = "Normal";
+        this.bulletPowerUp = false;
         this.rateOfFire = .4f;
         this.lives--;
         this.health = 100;
@@ -307,10 +315,6 @@ public class Tank implements Moveable, Collidable {
         return this.lives < 1;
     }
 
-    public void setBulletType(String type) {
-        this.bulletType = type;
-    }
-
     public void setRateOfFire(float f) {
         this.rateOfFire = f;
     }
@@ -319,15 +323,37 @@ public class Tank implements Moveable, Collidable {
         this.lives = lives;
     }
 
+    public boolean isBulletPoweredUp() {
+        return bulletPowerUp;
+    }
+
+    public void setBulletPowerUp(boolean bulletPowerUp) {
+        this.bulletPowerUp = bulletPowerUp;
+    }
+
     @Override
     public void handleCollision(Collidable c) {
         if (c instanceof Wall) {
-            this.setX(this.previousX);
-            this.setY(this.previousY);
+
+            int distanceFromWall = 5;
+
+            if( ((Math.abs(this.hitbox.getMaxY() - ((Wall)c).getHitBox().getMinY())) <= distanceFromWall)){
+               this.setPosition(this.x, this.previousY-1); //-2
+            } else
+            if(((Math.abs(this.hitbox.getMinY() - ((Wall)c).getHitBox().getMaxY())) <= distanceFromWall)){
+                this.setPosition(this.x, this.previousY+1);
+            }
+
+            if((Math.abs(this.hitbox.getMaxX() - ((Wall)c).getHitBox().getMinX())) <= distanceFromWall){
+                this.setPosition(this.previousX-1, this.y);
+            } else
+            if((Math.abs(this.hitbox.getMinX() - ((Wall)c).getHitBox().getMaxX())) <= distanceFromWall){
+                this.setPosition(this.previousX+1, this.y);
+            }
+
         }
         if (c instanceof Powerup) {
             ((Powerup) c).applyPowerUp(this);
-            (new Sound(ResourcePool.getSounds("powerup"))).playSound();
             Game.removeFromPowerUps((Powerup) c);
             c.setToBeRemoved();
         }

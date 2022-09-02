@@ -17,16 +17,18 @@ import java.util.List;
 
 import GameObjects.*;
 import GameObjects.Bullet.Bullet;
+import GameObjects.PowerUps.BulletPowerUp;
+import GameObjects.PowerUps.FullAutoPowerUp;
+import GameObjects.PowerUps.HealthPowerUp;
+import GameObjects.PowerUps.Powerup;
 import GameObjects.Tanks.Tank;
 import GameObjects.Tanks.TankControl;
+import GameObjects.Walls.BreakableWall;
+import GameObjects.Walls.Wall;
 
-/**
- * @author anthony-pc
- */
 public class Game extends JPanel implements Runnable {
 
     private BufferedImage world;
-
     private Tank t1;
     private Tank t2;
     private Launcher lf;
@@ -42,14 +44,9 @@ public class Game extends JPanel implements Runnable {
     private List<Collidable> collidables = new ArrayList<>();
     private List<Moveable> moveables = new ArrayList<>();
 
-    /**
-     * @param lf
-     */
     public Game(Launcher lf) {
         this.lf = lf;
     }
-
-
     /**
      * Main game loop
      */
@@ -64,13 +61,13 @@ public class Game extends JPanel implements Runnable {
                 this.tick++;
 
                 // All object values are updated
-                this.t1.update(this); // update tank
+                this.t1.update(this);
                 this.t2.update(this);
                 Animations.forEach(e -> e.update(this));
                 bullets.forEach(e -> e.update());
 
                 /***
-                 * All moveables have a handle collision method that is called on all collidables
+                 * All moveables have a handle collision method that is called on all collidables.
                  *
                  * Note: Moveables make all changes to the collidbles by requesting the collidables
                  * to make the changes by calling a method on the reference to that specific collidable
@@ -87,9 +84,8 @@ public class Game extends JPanel implements Runnable {
 
                 /**
                  * These two loops dynamically resize the moveable and collidable lists based
-                 * on whether or not the given value in the lists should be removed which is
-                 * determined in the loop above
-                 *
+                 * on whether the given value in the lists should be removed which is determined
+                 * in the loop above.
                  */
 
                 int z = this.moveables.size();
@@ -141,7 +137,7 @@ public class Game extends JPanel implements Runnable {
     /**
      * This method intitializes all game objects and can be used to reset them when the game is finished as well
      * <p>
-     * Note: All new collidable objects must be added to the collideables and all of the moveable objects must
+     * Note: All new collidable objects must be added to the collideables and all the moveable objects must
      * be added to the moveables list
      */
     public void InitializeGame() {
@@ -177,7 +173,7 @@ public class Game extends JPanel implements Runnable {
 
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
-                Background.add(new Background(i * 240, j * 315, ResourcePool.getImages("floor")));
+                Background.add(new Background(i * 240, j * 315));
             }
         }
         /**
@@ -192,38 +188,33 @@ public class Game extends JPanel implements Runnable {
                     switch (items[j]) {
                         case "9" -> {
 
-                            Wall w = new Wall(i * 30, j * 30, ResourcePool.getImages("unbreakable"));
+                            Wall w = new Wall(i * 30, j * 30);
                             addToCollidables(w);
                             walls.add(w);
                         }
                         case "3" -> {
 
-                            Wall w = new Wall(i * 30, j * 30, ResourcePool.getImages("unbreakable"));
+                            Wall w = new Wall(i * 30, j * 30);
                             walls.add(w);
                             addToCollidables(w);
                         }
-                        case "2" -> {
-                            BreakableWall bw = new BreakableWall(i * 30, j * 30, ResourcePool.getImages("break1"));
-                            walls.add(bw);
-                            addToCollidables(bw);
-                        }
-                        case "4" -> {
-                            BreakableWall bw = new BreakableWall(i * 30, j * 30, ResourcePool.getImages("break2"));
+                        case "2", "4" -> {
+                            BreakableWall bw = new BreakableWall(i * 30, j * 30);
                             walls.add(bw);
                             addToCollidables(bw);
                         }
                         case "5" -> {
-                            Powerup pu = new HealthPowerUp(i * 30, j * 30, ResourcePool.getImages("healthPowerUp"));
+                            Powerup pu = new HealthPowerUp(i * 30, j * 30);
                             PowerUps.add(pu);
                             addToCollidables(pu);
                         }
                         case "6" -> {
-                            Powerup pu = new FullAutoPowerUp(i * 30, j * 30, ResourcePool.getImages("fullAutoPowerUp"));
+                            Powerup pu = new FullAutoPowerUp(i * 30, j * 30);
                             PowerUps.add(pu);
                             addToCollidables(pu);
                         }
                         case "7" -> {
-                            Powerup pu = new BulletPowerUp(i * 30, j * 30, ResourcePool.getImages("rocketPowerUp"));
+                            Powerup pu = new BulletPowerUp(i * 30, j * 30);
                             PowerUps.add(pu);
                             addToCollidables(pu);
                         }
@@ -276,7 +267,7 @@ public class Game extends JPanel implements Runnable {
         }
 
         BufferedImage nm = world.getSubimage(0, 0, GameConstants.WORLD_WIDTH, GameConstants.WORLD_HEIGHT);
-        g2.scale(.2, .2);
+        g2.scale(.2, .18);
         g2.drawImage(nm, 2255, 0, null);
 
     }
@@ -306,7 +297,6 @@ public class Game extends JPanel implements Runnable {
         this.walls.remove(w);
 
     }
-
     public void addToCollidables(Collidable c) {
         this.collidables.add(c);
     }

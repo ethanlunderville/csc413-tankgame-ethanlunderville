@@ -8,11 +8,6 @@ package GameObjects.Tanks;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
-
-/**
- * @author anthony-pc
- */
 public class TankControl implements KeyListener {
 
     private Tank t1;

@@ -1,16 +1,20 @@
-package GameObjects;
+package GameObjects.Walls;
+
+import GameObjects.Collidable;
+import GameObjects.GameObject;
+import Main.ResourcePool;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Wall extends GameObject implements Collidable {
 
-    private float y, x;
-    private BufferedImage img;
-    private Rectangle hitBox;
-    private boolean toBeRemoved = false;
+    protected float y, x;
+    protected static BufferedImage img = ResourcePool.getImages("unbreakable");
+    protected Rectangle hitBox;
+    protected boolean toBeRemoved = false;
 
-    public Wall(float y, float x, BufferedImage img) {
+    public Wall(float y, float x) {
         this.y = y;
         this.x = x;
         this.img = img;
@@ -27,7 +31,7 @@ public class Wall extends GameObject implements Collidable {
 
     @Override
     public void drawImage(Graphics2D buffer) {
-        buffer.drawImage(img, (int) x, (int) y, null);
+        buffer.drawImage(this.img, (int) x, (int) y, null);
         buffer.setColor(Color.CYAN);
     }
 

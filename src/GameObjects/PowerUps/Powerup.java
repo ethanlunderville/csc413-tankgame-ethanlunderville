@@ -1,5 +1,7 @@
-package GameObjects;
+package GameObjects.PowerUps;
 
+import GameObjects.Collidable;
+import GameObjects.GameObject;
 import GameObjects.Tanks.Tank;
 
 import java.awt.*;
@@ -10,14 +12,12 @@ public abstract class Powerup extends GameObject implements Collidable {
 
     protected Rectangle hitbox;
     protected float y, x;
-    protected BufferedImage img;
+    protected static BufferedImage img;
     protected boolean toBeRemoved = false;
 
-    public Powerup(float y, float x, BufferedImage img) {
+    public Powerup(float y, float x) {
         this.y = y;
         this.x = x;
-        this.img = img;
-        this.hitbox = new Rectangle((int) x, (int) y, this.img.getWidth(), this.img.getHeight());
     }
 
     @Override

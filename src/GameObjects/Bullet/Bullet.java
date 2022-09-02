@@ -1,10 +1,11 @@
 package GameObjects.Bullet;
 
-import GameObjects.BreakableWall;
+import GameObjects.Walls.BreakableWall;
 import GameObjects.Collidable;
 import GameObjects.Moveable;
 import GameObjects.Tanks.Tank;
 import Main.ResourcePool;
+import Main.Sound;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -12,28 +13,26 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class Bullet implements Moveable, Collidable {
+    protected final Main.Game game;
+    protected float x;
+    protected float y;
+    protected float angle;
+    protected Rectangle hitbox;
+    protected float R = 5f;
+    protected BufferedImage img = ResourcePool.getImages("bullet");
+    protected static int damage = 20;
+    protected Tank shooter;
+    protected static List<BufferedImage> explosionAnimation = ResourcePool.getAnimations("hit");
+    protected boolean toBeRemoved = false;
 
-    private final Main.Game game;
-    private float x;
-    private float y;
-    private float angle;
-    private Rectangle hitbox;
-    private float R = 5f;
-    private BufferedImage img;
-    private int damage;
-    private Tank shooter;
-    private List<BufferedImage> explosionAnimation = ResourcePool.getAnimations("hit");
-    private boolean toBeRemoved = false;
-
-    public Bullet(Main.Game game, float x, float y, float angle, BufferedImage img, Tank shooter, int damage) {
+    public Bullet(Main.Game game, float x, float y, float angle, Tank shooter) {
         this.game = game;
         this.x = x;
         this.y = y;
-        this.img = img;
         this.angle = angle;
         this.hitbox = new Rectangle((int) x, (int) y, this.img.getWidth(), this.img.getHeight());
         this.shooter = shooter;
-        this.damage = damage;
+        (new Sound(ResourcePool.getSounds("shoot"))).playSound();
     }
 
     public void setX(float x) {
@@ -61,7 +60,6 @@ public class Bullet implements Moveable, Collidable {
         y += Math.round(R * Math.sin(Math.toRadians(angle)));
         this.hitbox.setLocation((int) x, (int) y);
     }
-
     @Override
     public String toString() {
         return "x=" + x + ", y=" + y + ", angle=" + angle;

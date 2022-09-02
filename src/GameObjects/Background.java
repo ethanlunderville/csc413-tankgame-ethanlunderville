@@ -1,16 +1,18 @@
 package GameObjects;
 
+import Main.ResourcePool;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Background {
     private float y, x;
-    private BufferedImage img;
 
-    public Background(float y, float x, BufferedImage img) {
+    protected static BufferedImage img = ResourcePool.getImages("floor");
+
+    public Background(float y, float x) {
         this.y = y;
         this.x = x;
-        this.img = img;
     }
 
     public void drawImage(Graphics2D buffer) {
